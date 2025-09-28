@@ -18,7 +18,12 @@ export default function OGPreview() {
 
   return (
     <div className="space-y-4">
-      <Input ref={urlRef} placeholder="https://example.com" type="url" />
+      <Input
+        ref={urlRef}
+        placeholder="https://example.com"
+        type="url"
+        className="w-full"
+      />
       <button
         onClick={handlePreview}
         className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
