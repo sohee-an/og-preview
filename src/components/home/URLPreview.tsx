@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, FormEvent } from "react";
 import Input from "@/components/Input";
 import { fetchMeta } from "@/app/actions/fetchMeta";
 
@@ -8,7 +8,8 @@ export default function OGPreview() {
   const urlRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<any>(null);
 
-  const handlePreview = async () => {
+  const handlePreview = async (e: FormEvent) => {
+    e.preventDefault();
     const url = urlRef.current?.value;
     if (!url) return alert("URL을 입력해주세요");
 
@@ -18,18 +19,21 @@ export default function OGPreview() {
 
   return (
     <div className="space-y-4">
-      <Input
-        ref={urlRef}
-        placeholder="https://example.com"
-        type="url"
-        className="w-full"
-      />
-      <button
-        onClick={handlePreview}
-        className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
-      >
-        미리보기 생성
-      </button>
+      <h1 className="text-xl font-bold mb-4">OG Preview Generator</h1>
+      <form onSubmit={handlePreview}>
+        <Input
+          ref={urlRef}
+          placeholder="https://example.com"
+          type="url"
+          className="w-full mb-4"
+        />
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
+        >
+          미리보기 생성
+        </button>
+      </form>
 
       {preview && (
         <div className="border rounded p-3 mt-4">
