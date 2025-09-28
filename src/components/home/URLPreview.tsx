@@ -59,8 +59,8 @@ export default function OGPreview() {
           {isLoading ? "로딩중" : "미리보기 생성"}
         </button>
       </form>
-      <Loading />
-      {/* {preview && <Preview preview={preview} isLoading={isLoading} />} */}
+
+      {preview && <Preview preview={preview} isLoading={isLoading} />}
     </div>
   );
 }
