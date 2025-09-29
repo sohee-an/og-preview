@@ -4,6 +4,7 @@ import { useRef, useState, FormEvent } from "react";
 import Input from "@/components/Input";
 import { fetchMeta } from "@/app/actions/fetchMeta";
 import Loading from "../common/Loading";
+import NoImage from "../common/NoImage";
 
 type PreviewProps = {
   preview: any;
@@ -14,13 +15,31 @@ export function Preview({ preview, isLoading }: PreviewProps) {
   if (isLoading) {
     return <Loading />;
   }
+  if (!preview)
+    return (
+      <div className="border rounded p-3 mt-4 bg-red-50 text-red-600">
+        메타데이터를 불러올 수 없습니다. <br />
+        URL을 확인해주세요.
+      </div>
+    );
+
   return (
     <div className="border rounded p-3 mt-4">
-      {preview.image && (
+      {preview.image ? (
         <img src={preview.image} alt="preview" className="mb-2" />
+      ) : (
+        <NoImage />
       )}
-      a<h2 className="font-bold">{preview.title}</h2>
-      <p className="text-sm text-gray-600">{preview.description}</p>
+
+      <h2 className="font-bold">
+        {preview.title || <span className="text-gray-400">제목 없음</span>}
+      </h2>
+
+      <p className="text-sm text-gray-600">
+        {preview.description || (
+          <span className="text-gray-400">설명 없음</span>
+        )}
+      </p>
     </div>
   );
 }
@@ -35,10 +54,14 @@ export default function OGPreview() {
     setIsLoading(true);
     const url = urlRef.current?.value;
     if (!url) return alert("URL을 입력해주세요");
-
-    const data = await fetchMeta(url);
-    setIsLoading(false);
-    setPreview(data);
+    try {
+      const data = await fetchMeta(url);
+      setIsLoading(false);
+      setPreview(data);
+    } catch (err) {
+      console.log("ddd", err);
+      alert(err);
+    }
   };
 
   return (
