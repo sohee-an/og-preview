@@ -5,11 +5,22 @@ import Input from "@/components/Input";
 import { fetchMeta } from "@/app/actions/fetchMeta";
 import Loading from "../common/Loading";
 import NoImage from "../common/NoImage";
+import { TAB_ITEMS, TabType } from "../../constants/previewMenu";
+import TabButton from "../common/TabButton";
+import KakaoPreview from "./KakoPreview";
+import SlackPreview from "./SlackPreview";
+import NotionPreview from "./NotionPreview";
 
 type PreviewProps = {
   preview: any;
   isLoading: boolean;
 };
+
+const PREVIEW_CATEGORY = [
+  { id: 0, label: "카카오", value: "kakao", isActive: true },
+  { id: 1, label: "슬랙", value: "slack", isActive: false },
+  { id: 2, label: "노션", value: "노션", isActive: false },
+];
 
 export function Preview({ preview, isLoading }: PreviewProps) {
   if (isLoading) {
@@ -48,6 +59,7 @@ export default function OGPreview() {
   const urlRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabType>("kakao");
 
   const handlePreview = async (e: FormEvent) => {
     e.preventDefault();
@@ -65,7 +77,7 @@ export default function OGPreview() {
   };
 
   return (
-    <div className="space-y-4">
+    <section className="space-y-4">
       <h1 className="text-xl font-bold mb-4">OG Preview Generator</h1>
       <form onSubmit={handlePreview}>
         <Input
@@ -84,6 +96,32 @@ export default function OGPreview() {
       </form>
 
       {preview && <Preview preview={preview} isLoading={isLoading} />}
-    </div>
+
+      <div className="flex gap-2">
+        {TAB_ITEMS.map((tab) => (
+          <TabButton
+            key={tab}
+            text={tab.toUpperCase()}
+            value={tab}
+            isActive={activeTab === tab}
+            onClick={() => setActiveTab(tab)}
+          />
+        ))}
+      </div>
+
+      {preview && (
+        <div className="mt-4">
+          {isLoading && <Loading />}
+          {!isLoading && (
+            <>
+              {activeTab === "kakao" && <KakaoPreview {...preview} />}
+
+              {activeTab === "slack" && <SlackPreview {...preview} />}
+              {activeTab === "notion" && <NotionPreview {...preview} />}
+            </>
+          )}
+        </div>
+      )}
+    </section>
   );
 }
