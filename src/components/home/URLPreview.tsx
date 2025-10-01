@@ -16,12 +16,6 @@ type PreviewProps = {
   isLoading: boolean;
 };
 
-const PREVIEW_CATEGORY = [
-  { id: 0, label: "카카오", value: "kakao", isActive: true },
-  { id: 1, label: "슬랙", value: "slack", isActive: false },
-  { id: 2, label: "노션", value: "노션", isActive: false },
-];
-
 export function Preview({ preview, isLoading }: PreviewProps) {
   if (isLoading) {
     return <Loading />;
@@ -63,9 +57,11 @@ export default function OGPreview() {
 
   const handlePreview = async (e: FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+
     const url = urlRef.current?.value;
     if (!url) return alert("URL을 입력해주세요");
+
+    setIsLoading(true);
     try {
       const data = await fetchMeta(url);
       setIsLoading(false);
