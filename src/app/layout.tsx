@@ -29,7 +29,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased w-full min-h-screen flex flex-col`}
       >
         <Header />
-        <section className="flex-1 pt-16">{children}</section>
+        <section className="flex-1 pt-16 ">{children}</section>
         <footer className="w-full h-[40px]">footer</footer>
       </body>
     </html>
